@@ -36,7 +36,7 @@ require([
     // Pure
 
     //  url :: String -> URL
-    var url = function (t) {
+    var cd = function (t) {
       return 'https://api.flickr.com/services/feeds/photos_public.gne?tags=' + t + '&format=json&jsoncallback=?';
     };
 
