@@ -7,6 +7,7 @@ var _ = require('ramda');
 // Use safeProp and map/join or chain to safely get the street name when given a user
 
 var safeProp = _.curry(function (x, o) { return Maybe.of(o[x]); });
+var chainSafeProp = prop => _.chain(safeProp(prop))
 var user = {
   id: 2,
   name: "albert",
@@ -18,7 +19,7 @@ var user = {
   }
 };
 
-var ex1 = undefined;
+var ex1 = _.compose(chainSafeProp('name'), chainSafeProp('street'), safeProp('address'))
 
 
 // Exercise 2
@@ -29,6 +30,8 @@ var getFile = function() {
   return new IO(function(){ return __filename; });
 }
 
+var getFileName = path => _.last(path.split('\\'))
+
 var pureLog = function(x) {
   return new IO(function(){
     console.log(x);
@@ -36,9 +39,7 @@ var pureLog = function(x) {
   });
 }
 
-var ex2 = undefined;
-
-
+var ex2 = _.compose(_.chain(pureLog), _.map(getFileName), getFile)
 
 // Exercise 3
 // ==========
@@ -60,7 +61,7 @@ var getComments = function(i) {
   });
 }
 
-var ex3 = undefined;
+var ex3 = _.compose(_.chain(getComments), _.map(_.prop('id')), getPost)
 
 
 // Exercise 4
@@ -91,7 +92,7 @@ var validateEmail = function(x){
 }
 
 //  ex4 :: Email -> Either String (IO String)
-var ex4 = undefined;
+var ex4 = _.compose(_.map(emailBlast) ,_.map(addToMailingList), validateEmail)
 
 
 module.exports = {ex1: ex1, ex2: ex2, ex3: ex3, ex4: ex4, user: user}
